@@ -2,29 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Button, Alert, TextInput, Text } from 'react-native';
 import axios from 'axios';
 import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+import { STRIPE_PUBLISHABLE_KEY } from './config/env';
 
 export default function App() {
-  const [publishableKey, setPublishableKey] = useState<string | null>(null);
+  // const [publishableKey, setPublishableKey] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchPublishableKey = async () => {
-      try {
-        const response = await axios.get('http://192.168.1.3:3000/api/payment/get-publishable-key');
-        setPublishableKey(response.data.publishableKey);
-      } catch (error) {
-        Alert.alert('Lỗi', 'Không thể lấy publishable key từ server');
-      }
-    };
+  // useEffect(() => {
+  //   const fetchPublishableKey = async () => {
+  //     try {
+  //       const response = await axios.get('http://192.168.1.3:3000/api/payment/get-publishable-key');
+  //       setPublishableKey(response.data.publishableKey);
+  //     } catch (error) {
+  //       Alert.alert('Lỗi', 'Không thể lấy publishable key từ server');
+  //     }
+  //   };
 
-    fetchPublishableKey();
-  }, []);
+  //   fetchPublishableKey();
+  // }, []);
 
-  if (!publishableKey) {
-    return <Text style={{ marginTop: 50, textAlign: 'center' }}>Đang tải...</Text>;
-  }
+  // if (!publishableKey) {
+  //   return <Text style={{ marginTop: 50, textAlign: 'center' }}>Đang tải...</Text>;
+  // }
 
   return (
-    <StripeProvider publishableKey={publishableKey}>
+    <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
       <PaymentScreen />
     </StripeProvider>
   );
@@ -38,8 +39,8 @@ const PaymentScreen = () => {
   const [description, setDescription] = useState('');
 
   const fetchPaymentSheetParams = async () => {
-    const response = await axios.post('http://192.168.1.3:3000/api/payment/create-payment-intent', {
-      amount: parseInt(amount) * 100, // Stripe sử dụng cent
+    const response = await axios.post('http://192.168.1.10:3000/api/payment/create-payment-intent', {
+      amount: parseInt(amount) * 100, // Stripe sử dụng cent để tránh lỗi làm tròn số, vnd thì bth
       name,
       description,
     });
