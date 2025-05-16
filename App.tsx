@@ -5,6 +5,7 @@ import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
 import { STRIPE_PUBLISHABLE_KEY } from './config/env';
 
 export default function App() {
+  // Call server to get publishable key
   // const [publishableKey, setPublishableKey] = useState<string | null>(null);
 
   // useEffect(() => {
